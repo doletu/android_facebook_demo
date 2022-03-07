@@ -77,8 +77,8 @@ public class ExecuteUITest {
     @Test
     public void testFacebook_correctData_enterNotificationCenter() throws Exception {
 
-        final String FB_EMAIL = "YOUR_EMAIL@mail.com";
-        final String FB_PASS = "YOUR_PASS_WORD";
+        final String FB_EMAIL = "Email";
+        final String FB_PASS = "Password";
 
         final UiDevice mDevice =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -88,40 +88,7 @@ public class ExecuteUITest {
         // Login Activity
         btnLogin.perform(click());
 
-        // Facebook WebView - Page 1
-        mDevice.wait(Until.findObject(By.clazz(WebView.class)), timeOut);
 
-        // Set Login
-        UiObject emailInput = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(EditText.class));
-
-        emailInput.waitForExists(timeOut);
-        emailInput.setText(FB_EMAIL);
-
-        // Set Password
-        UiObject passwordInput = mDevice.findObject(new UiSelector()
-                .instance(1)
-                .className(EditText.class));
-
-        passwordInput.waitForExists(timeOut);
-        passwordInput.setText(FB_PASS);
-
-        // Confirm Button Click
-        UiObject buttonLogin = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(Button.class));
-
-        buttonLogin.waitForExists(timeOut);
-        buttonLogin.clickAndWaitForNewWindow();
-
-        // Facebook WebView - Page 2
-        UiObject buttonOk = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(Button.class));
-
-        buttonOk.waitForExists(timeOut);
-        buttonOk.click();
 
         // should be properly synchronised with Espresso via IdlingResource,
         // ConditionWatcher or any similar waiting solution
