@@ -31,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //**************** APIキーの設定とSDKの初期化 **********************
-        NCMB.initialize(this.getApplicationContext(), "YOUR_APPLICATION_KEY", "YOUR_CLIENT_KEY");
+        NCMB.initialize(this, "YOUR_APPLICATION_KEY", "YOUR_CLIENT_KEY");
+
+
+
 
         // Facebook settings
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AppEventsLogger.activateApp(this);
+        AppEventsLogger.activateApp(getApplication());
 
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             NCMBUser.loginWith(parameters);
                             Toast.makeText(getApplicationContext(), "Login to NIFCLOUD mbaas with Facebook account", Toast.LENGTH_LONG).show();
                         } catch (NCMBException e) {
-                            e.printStackTrace();
+                            Log.d("tag", e.getMessage().toString());
                         }
                     }
 

@@ -1,8 +1,12 @@
 package ncmb.mbaas.com.nifcloud.facebook;
 
 
+import android.app.Application;
+import android.app.Notification;
+import android.icu.text.Edits;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +38,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertThat;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -80,6 +87,7 @@ public class ExecuteUITest {
         final String FB_EMAIL = "YOUR_EMAIL@mail.com";
         final String FB_PASS = "YOUR_PASS_WORD";
 
+
         final UiDevice mDevice =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -88,46 +96,46 @@ public class ExecuteUITest {
         // Login Activity
         btnLogin.perform(click());
 
-        // Facebook WebView - Page 1
-        mDevice.wait(Until.findObject(By.clazz(WebView.class)), timeOut);
 
-        // Set Login
-        UiObject emailInput = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(EditText.class));
 
-        emailInput.waitForExists(timeOut);
-        emailInput.setText(FB_EMAIL);
 
-        // Set Password
-        UiObject passwordInput = mDevice.findObject(new UiSelector()
-                .instance(1)
-                .className(EditText.class));
 
-        passwordInput.waitForExists(timeOut);
-        passwordInput.setText(FB_PASS);
+        if (TextHelpers.getText(btnLogin).equalsIgnoreCase("Log out")) {
+            btnLogin.check(matches(isDisplayed()));
+        }else{
+            // Set Login
+            UiObject emailInput = mDevice.findObject(new UiSelector().instance(0).text("Phone or email"));
 
-        // Confirm Button Click
-        UiObject buttonLogin = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(Button.class));
+            emailInput.waitForExists(timeOut);
+            emailInput.setText(FB_EMAIL);
 
-        buttonLogin.waitForExists(timeOut);
-        buttonLogin.clickAndWaitForNewWindow();
 
-        // Facebook WebView - Page 2
-        UiObject buttonOk = mDevice.findObject(new UiSelector()
-                .instance(0)
-                .className(Button.class));
+            // Set Password
+            UiObject passwordInput = mDevice.findObject(new UiSelector()
+                    .instance(0)
+                    .className(EditText.class).textContains("Password"));
 
-        buttonOk.waitForExists(timeOut);
-        buttonOk.click();
+            passwordInput.waitForExists(timeOut);
+            passwordInput.setText(FB_PASS);
 
-        // should be properly synchronised with Espresso via IdlingResource,
-        // ConditionWatcher or any similar waiting solution
-        Thread.sleep(15000);
+            // Confirm Button Click
+            UiObject buttonLogin = mDevice.findObject(new UiSelector()
+                    .instance(0)
+                    .descriptionContains("Log In"));
 
-        btnLogin.check(matches(withText("Log out")));
+            buttonLogin.waitForExists(timeOut);
+            buttonLogin.click();
+
+
+
+
+            // should be properly synchronised with Espresso via IdlingResource,
+            // ConditionWatcher or any similar waiting solution
+            Thread.sleep(15000);
+
+            btnLogin.check(matches(withText("Log out")));
+        }
+
     }
 
     private static class TextHelpers {
