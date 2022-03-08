@@ -1,8 +1,12 @@
 package ncmb.mbaas.com.nifcloud.facebook;
 
 
+import android.app.Application;
+import android.app.Notification;
+import android.icu.text.Edits;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +38,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertThat;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -80,6 +87,7 @@ public class ExecuteUITest {
         final String FB_EMAIL = "Email";
         final String FB_PASS = "Password";
 
+
         final UiDevice mDevice =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -90,11 +98,44 @@ public class ExecuteUITest {
 
 
 
-        // should be properly synchronised with Espresso via IdlingResource,
-        // ConditionWatcher or any similar waiting solution
-        Thread.sleep(15000);
 
-        btnLogin.check(matches(withText("Log out")));
+
+        if (TextHelpers.getText(btnLogin).equalsIgnoreCase("Log out")) {
+            btnLogin.check(matches(isDisplayed()));
+        }else{
+            // Set Login
+            UiObject emailInput = mDevice.findObject(new UiSelector().instance(0).text("Phone or email"));
+
+            emailInput.waitForExists(timeOut);
+            emailInput.setText(FB_EMAIL);
+
+
+            // Set Password
+            UiObject passwordInput = mDevice.findObject(new UiSelector()
+                    .instance(0)
+                    .className(EditText.class).textContains("Password"));
+
+            passwordInput.waitForExists(timeOut);
+            passwordInput.setText(FB_PASS);
+
+            // Confirm Button Click
+            UiObject buttonLogin = mDevice.findObject(new UiSelector()
+                    .instance(0)
+                    .descriptionContains("Log In"));
+
+            buttonLogin.waitForExists(timeOut);
+            buttonLogin.click();
+
+
+
+
+            // should be properly synchronised with Espresso via IdlingResource,
+            // ConditionWatcher or any similar waiting solution
+            Thread.sleep(15000);
+
+            btnLogin.check(matches(withText("Log out")));
+        }
+
     }
 
     private static class TextHelpers {
