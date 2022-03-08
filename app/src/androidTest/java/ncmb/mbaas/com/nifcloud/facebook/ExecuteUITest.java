@@ -84,8 +84,8 @@ public class ExecuteUITest {
     @Test
     public void testFacebook_correctData_enterNotificationCenter() throws Exception {
 
-        final String FB_EMAIL = "Email";
-        final String FB_PASS = "Password";
+        final String FB_EMAIL = "YOUR_EMAIL@mail.com";
+        final String FB_PASS = "YOUR_PASS_WORD";
 
 
         final UiDevice mDevice =
